@@ -1,11 +1,12 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from lists.models import Item, List
+from lists.forms import ItemForm
 from django.core.exceptions import ValidationError
 
 # Create your views here.
 def home_page(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form': ItemForm()})
 
 def new_list(request):
     list_ = List.objects.create()
