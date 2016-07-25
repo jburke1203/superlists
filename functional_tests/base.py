@@ -2,6 +2,7 @@ import sys
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 
 class FunctionalTest(StaticLiveServerTestCase):
 
@@ -33,3 +34,14 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def get_item_input_box(self):
         return self.browser.find_element_by_id('id_text')
+
+
+    def check_logged_in(self, email):
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertIn(email, navbar.text)
+
+
+    def check_logged_out(self, email):
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertNotIn(email, navbar.text)
+        

@@ -1,9 +1,8 @@
 import re
 from django.core import mail
-
 from .base import FunctionalTest
 
-TEST_EMAIL = 'james.burke1203@gmail.com'
+TEST_EMAIL = 'elspeth@example.com'
 SUBJECT = 'Your login link for Superlists'
 
 class LoginTest(FunctionalTest):
@@ -41,14 +40,11 @@ class LoginTest(FunctionalTest):
         self.browser.get(url)
 
         # she is logged in!
-        self.browser.find_element_by_link_text('Log out')
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertIn(TEST_EMAIL, navbar.text)
+        self.check_logged_in(TEST_EMAIL)
 
         # Now she logs out
         self.browser.find_element_by_link_text('Log out').click()
 
         # She is logged out
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertNotIn(TEST_EMAIL, navbar.text)
-        self.browser.find_element_by_name('email')
+        self.check_logged_out(TEST_EMAIL)
+
