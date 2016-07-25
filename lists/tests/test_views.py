@@ -12,6 +12,12 @@ from lists.forms import (
 from unittest import skip
 
 
+class MyListsTest(TestCase):
+
+    def test_my_list_url_renders_my_lists_template(self):
+        response = self.client.get('/lists/users/a@b.com/')
+        self.assertTemplateUsed(response, 'my_lists.html')
+
 class ListViewTest(TestCase):
 
     def test_can_save_a_POST_request_to_an_existing_list(self):
