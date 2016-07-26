@@ -9,6 +9,9 @@ class User(models.Model):
     REQUIRED_FIELDS = ()
     USERNAME_FIELD = 'email'
 
+    def is_authenticated(self):
+        return True
+
 class Token(models.Model):
     email = models.EmailField()
     uid = models.CharField(default=uuid.uuid4, max_length=40)

@@ -3,8 +3,10 @@ from lists.forms import EMPTY_ITEM_ERROR, ItemForm
 from lists.models import Item, List
 from lists.forms import (
     DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
-    ExistingListItemForm, ItemForm
+    ExistingListItemForm, ItemForm, NewListForm
 )
+from unittest.mock import Mock, patch
+
 
 class ExistingListItemFormTest(TestCase):
 
@@ -28,13 +30,6 @@ class ExistingListItemFormTest(TestCase):
 
 class ItemFormTest(TestCase):
 
-    def test_form_save_handles_saving_to_a_list(self):
-        list_ = List.objects.create()
-        form = ItemForm(data={'text': 'do me'})
-        new_item = form.save(for_list=list_)
-        self.assertEqual(new_item, Item.objects.first())
-        self.assertEqual(new_item.text, 'do me')
-        self.assertEqual(new_item.list, list_)
 
     def test_form_item_input_has_placeholder_and_css_classes(self):
         form = ItemForm()
@@ -51,3 +46,11 @@ class ItemFormTest(TestCase):
         form = ExistingListItemForm(for_list=list_, data={'text': 'hi'})
         new_item = form.save()
         self.assertEqual(new_item, Item.objects.all()[0])
+
+    @patch('lists.forms.List.create_new')
+    def test_save_returns_new_list_object(self, mock_List_create_new):
+        user = Mock(is_authenticated=lambda: True)
+        form = NewListForm(data={'text': 'new item text'})
+        form.is_valid()
+        response = form.save(owner=user)
+        self.assertEqual(response, mock_List_create_new.return_value)
