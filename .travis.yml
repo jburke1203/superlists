@@ -1,11 +1,15 @@
 language: python
 python:
-  - "3.4"
   - "3.5"
 # command to install dependencies
 install: 
   - "pip install -r requirements.txt"
   - "pip install selenium==2.53.6"
+# make sure selenium can fire up Firefox
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 # command to run tests
 script: 
   - "python manage.py test functional_tests"
